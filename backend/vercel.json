@@ -7,9 +7,7 @@
     }
   ],
   "routes": [
-    {
-       "src": "/api/v1/(.*)",
-       "dest": "/api/index.ts"
-    }
+    { "handle": "filesystem" },
+    { "src": "/api/v1/(.*)", "dest": "/api/index.ts" }
   ]
 }
