@@ -53,8 +53,12 @@ app.use('/api/v1/results', resultRoutes);
 app.use('/api/v1/tahfiz', tahfizRoutes);
 app.use('/api/v1/finance', financeRoutes);
 
-// Basic health check route
+// Basic health check routes
 app.get('/health', (req: Request, res: Response) => {
+  res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+app.get('/api/v1/health', (req: Request, res: Response) => {
   res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
