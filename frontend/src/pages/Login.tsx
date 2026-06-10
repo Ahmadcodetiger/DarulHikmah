@@ -1,7 +1,7 @@
 // Login.tsx
 import { useState, useEffect, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { BookOpen, ShieldAlert, Moon, Sun, ArrowLeft, Eye, EyeOff, AlertCircle } from 'lucide-react';
+import { BookOpen, Moon, Sun, ArrowLeft, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
 
