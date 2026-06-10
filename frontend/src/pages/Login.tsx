@@ -209,25 +209,28 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
   };
 
   return (
-    <div className={`min-h-screen flex items-center justify-center p-4 transition-colors duration-300 ${
+    <div className={`min-h-screen flex items-center justify-center p-4 transition-colors duration-300 relative overflow-hidden ${
       theme === 'dark'
-        ? 'bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950'
-        : 'bg-gradient-to-br from-slate-50 via-white to-emerald-50/30'
+        ? 'bg-[hsl(222,47%,5%)]'
+        : 'bg-slate-50'
     }`}>
+      {/* Ambient background glows */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/[0.04] rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-indigo-500/[0.04] rounded-full blur-3xl pointer-events-none" />
 
       {/* Top navigation */}
-      <div className="fixed top-3 right-3 sm:top-5 sm:right-5 flex items-center gap-2 sm:gap-3 z-50">
+      <div className="fixed top-4 right-4 sm:top-5 sm:right-5 flex items-center gap-2 z-50">
         <Link to="/"
-          className={`flex items-center gap-1.5 text-xs font-bold px-3 py-2 rounded-xl border transition-all ${
-            theme === 'dark' ? 'border-slate-700 text-slate-400 hover:text-slate-200 hover:bg-slate-800' : 'border-slate-200 text-slate-500 hover:text-slate-700 hover:bg-white'
+          className={`flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl border transition-all ${
+            theme === 'dark' ? 'border-white/10 text-slate-400 hover:text-slate-200 hover:bg-white/5' : 'border-slate-200 text-slate-500 hover:text-slate-700 hover:bg-white'
           }`}>
           <ArrowLeft className="w-3.5 h-3.5" /> Back to Site
         </Link>
         <button
           onClick={toggleTheme}
-          className={`p-2.5 rounded-xl border transition-all ${
+          className={`p-2 rounded-xl border transition-all ${
             theme === 'dark'
-              ? 'border-slate-700 text-amber-400 bg-slate-800 hover:bg-slate-700'
+              ? 'border-white/10 text-amber-400 bg-white/5 hover:bg-white/10'
               : 'border-slate-200 text-slate-500 bg-white hover:bg-slate-50'
           }`}
           aria-label="Toggle theme"
@@ -236,25 +239,18 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
         </button>
       </div>
 
-      <div className="w-full max-w-md space-y-5">
+      <div className="w-full max-w-md space-y-4 relative">
         {/* Main card */}
-        <div className={`rounded-3xl border p-8 relative overflow-hidden shadow-2xl transition-all ${
+        <div className={`rounded-2xl border p-7 sm:p-8 relative overflow-hidden shadow-xl transition-all ${
           theme === 'dark'
-            ? 'bg-slate-900/90 border-slate-800 shadow-black/40 backdrop-blur-sm'
-            : 'bg-white/90 border-slate-200/60 shadow-slate-200/50 backdrop-blur-sm'
+            ? 'bg-[hsl(222,47%,9%)] border-white/[0.07]'
+            : 'bg-white border-slate-200'
         }`}>
-          
-          {/* Background decorations */}
-          <div className="absolute -top-10 -right-10 w-40 h-40 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none"></div>
-          <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none"></div>
-          
-          {/* Animated gradient border */}
-          <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-emerald-500 via-emerald-400 to-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 blur-xl"></div>
 
           {/* Logo and title */}
-          <div className="flex flex-col items-center mb-8 relative">
-            <div className="w-16 h-16 bg-gradient-to-br from-emerald-600 to-emerald-500 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-emerald-600/30 mb-4 transform hover:scale-105 transition-transform duration-300">
-              <BookOpen className="w-8 h-8" />
+          <div className="flex flex-col items-center mb-7 relative">
+            <div className="w-14 h-14 bg-gradient-to-br from-emerald-600 to-emerald-500 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-emerald-600/25 mb-4">
+              <BookOpen className="w-7 h-7" />
             </div>
             <h2 className={`text-2xl font-black tracking-tight text-center ${theme === 'dark' ? 'text-white' : 'text-slate-800'}`}>
               Darul Hikmah Academy
@@ -283,29 +279,28 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
           <form onSubmit={handleLogin} className="space-y-5">
             {/* Email Field */}
             <div>
-              <label className={`block text-xs font-bold uppercase tracking-wider mb-2 ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
+              <label className={`block text-[10px] font-bold uppercase tracking-widest mb-1.5 ${theme === 'dark' ? 'text-slate-500' : 'text-slate-400'}`}>
                 Email or Phone
               </label>
-              <div className="relative">
-                <input
-                  type="text"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="staff@darulhikmah.edu.ng or +2348012345678"
-                  className={`w-full px-4 py-3 rounded-2xl border outline-none transition-all text-sm font-medium ${
-                    theme === 'dark'
-                      ? 'bg-slate-800/50 border-slate-700 text-white placeholder-slate-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20'
-                      : 'bg-slate-50/50 border-slate-200 text-slate-800 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20'
-                  }`}
-                  disabled={loading}
-                  autoComplete="username"
-                />
-              </div>
+              <input
+                type="text"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="staff@darulhikmah.edu.ng"
+                className={`w-full px-4 py-3 rounded-xl border outline-none transition-all text-sm ${
+                  theme === 'dark'
+                    ? 'bg-white/5 border-white/10 text-white placeholder-slate-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/15'
+                    : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10'
+                }`}
+                disabled={loading}
+                autoComplete="username"
+                autoFocus
+              />
             </div>
 
             {/* Password Field */}
             <div>
-              <label className={`block text-xs font-bold uppercase tracking-wider mb-2 ${theme === 'dark' ? 'text-slate-400' : 'text-slate-600'}`}>
+              <label className={`block text-[10px] font-bold uppercase tracking-widest mb-1.5 ${theme === 'dark' ? 'text-slate-500' : 'text-slate-400'}`}>
                 Password
               </label>
               <div className="relative">
@@ -314,10 +309,10 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
-                  className={`w-full px-4 py-3 rounded-2xl border outline-none transition-all text-sm font-medium pr-12 ${
+                  className={`w-full px-4 py-3 rounded-xl border outline-none transition-all text-sm pr-11 ${
                     theme === 'dark'
-                      ? 'bg-slate-800/50 border-slate-700 text-white placeholder-slate-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20'
-                      : 'bg-slate-50/50 border-slate-200 text-slate-800 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20'
+                      ? 'bg-white/5 border-white/10 text-white placeholder-slate-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/15'
+                      : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10'
                   }`}
                   disabled={loading}
                   autoComplete="current-password"
@@ -325,9 +320,9 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors p-0.5"
                 >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
             </div>
@@ -353,11 +348,11 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
               </Link>
             </div>
 
-            {/* Login Button */}
+            {/* Sign In Button */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-600 text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-emerald-600/20 transition-all hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 text-sm"
+              className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-emerald-600/20 transition-all hover:-translate-y-0.5 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 text-sm"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
@@ -365,45 +360,34 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                   </svg>
-                  Authenticating...
+                  Authenticating…
                 </span>
               ) : 'Sign In to Portal'}
             </button>
           </form>
 
-          {/* Demo Credentials Info */}
-          <div className={`mt-6 pt-5 border-t text-center ${theme === 'dark' ? 'border-slate-800' : 'border-slate-100'}`}>
-            <div className="flex items-center justify-center gap-2 mb-2">
-              <ShieldAlert size={14} className="text-emerald-500" />
-              <span className="text-xs font-medium text-emerald-600 dark:text-emerald-400">Demo Access</span>
-            </div>
-            <div className="space-y-1 text-xs text-slate-500 dark:text-slate-400">
-              <p>Super Admin: superadmin@darulhikmah.edu.ng</p>
-              <p>Teacher: teacher@darulhikmah.edu.ng</p>
-              <p className="text-[11px] font-mono mt-2">Contact IT department for access credentials</p>
-            </div>
+          {/* Demo Credentials */}
+          <div className={`mt-5 pt-4 border-t ${theme === 'dark' ? 'border-white/[0.06]' : 'border-slate-100'}`}>
+            <details className="group">
+              <summary className={`flex items-center gap-2 text-xs font-semibold cursor-pointer list-none select-none ${theme === 'dark' ? 'text-slate-500 hover:text-slate-400' : 'text-slate-400 hover:text-slate-600'}`}>
+                <ShieldAlert size={13} className="text-emerald-500" />
+                Demo access credentials
+                <span className="ml-auto text-[10px] group-open:rotate-180 transition-transform">▾</span>
+              </summary>
+              <div className={`mt-3 p-3 rounded-xl space-y-1 font-mono text-[11px] ${theme === 'dark' ? 'bg-white/[0.03] text-slate-400' : 'bg-slate-50 text-slate-500'}`}>
+                <p>superadmin@darulhikmah.edu.ng</p>
+                <p>teacher@darulhikmah.edu.ng</p>
+                <p className={`text-[10px] mt-2 pt-2 border-t ${theme === 'dark' ? 'border-white/[0.06] text-slate-600' : 'border-slate-100 text-slate-400'}`}>Contact IT for production credentials</p>
+              </div>
+            </details>
           </div>
         </div>
 
         {/* Security Notice */}
-        <div className="text-center">
-          <p className={`text-xs ${theme === 'dark' ? 'text-slate-500' : 'text-slate-400'}`}>
-            🔒 Secured with 256-bit encryption • All activities are logged
-          </p>
-        </div>
+        <p className={`text-center text-[11px] ${theme === 'dark' ? 'text-slate-600' : 'text-slate-400'}`}>
+          🔒 256-bit encrypted · All activity is logged
+        </p>
       </div>
-
-      {/* Add keyframe animation */}
-      <style>{`
-        @keyframes shake {
-          0%, 100% { transform: translateX(0); }
-          25% { transform: translateX(-5px); }
-          75% { transform: translateX(5px); }
-        }
-        .animate-shake {
-          animation: shake 0.3s ease-in-out;
-        }
-      `}</style>
     </div>
   );
 };

@@ -19,7 +19,7 @@ export const getStudents = async (req: Request, res: Response) => {
           },
         },
       });
-      return res.json({ data: enrollments.map((e) => e.student) });
+      return res.json({ data: enrollments.map((e: any) => e.student) });
     }
 
     const students = await prisma.student.findMany({
@@ -34,7 +34,7 @@ export const getStudents = async (req: Request, res: Response) => {
       orderBy: { lastName: 'asc' },
     });
     res.json({ data: students });
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
     res.status(500).json({ error: 'Failed to fetch students' });
   }

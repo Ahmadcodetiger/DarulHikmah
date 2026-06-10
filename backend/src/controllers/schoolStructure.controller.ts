@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { prisma } from '../server';
-import { Section } from '@prisma/client';
+import type { Prisma, Section } from '@prisma/client';
 
 // =======================
 // Academic Session & Term

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { prisma } from '../server';
 import { AuthRequest } from '../middlewares/auth';
-import { Section } from '@prisma/client';
+import type { Prisma, Result, Section } from '@prisma/client';
 
 // Helper to determine Grade and Remark based on Score and Class Section
 const getGradeAndRemark = (score: number, section: Section) => {
@@ -211,16 +211,16 @@ export const getStudentReportCard = async (req: Request, res: Response) => {
     });
 
     // Calculate subject-level stats (averages and positions)
-    const subjectStats = studentResults.map((resObj) => {
-      const subjectResults = allClassResults.filter((r) => r.subjectId === resObj.subjectId);
-      const totalScores = subjectResults.map((r) => r.totalScore || 0);
+    const subjectStats = studentResults.map((resObj: any) => {
+      const subjectResults = allClassResults.filter((r: Result) => r.subjectId === resObj.subjectId);
+      const totalScores = subjectResults.map((r: Result) => r.totalScore || 0);
       
-      const average = totalScores.reduce((acc, curr) => acc + curr, 0) / (totalScores.length || 1);
+      const average = totalScores.reduce((acc: number, curr: number) => acc + curr, 0) / (totalScores.length || 1);
       const max = Math.max(...totalScores, 0);
       const min = Math.min(...totalScores, 0);
 
       // Subject Rank: Sort scores descending and find position
-      const sortedScores = [...totalScores].sort((a, b) => b - a);
+      const sortedScores = [...totalScores].sort((a: number, b: number) => b - a);
       const rank = sortedScores.indexOf(resObj.totalScore || 0) + 1;
 
       return {
@@ -242,17 +242,17 @@ export const getStudentReportCard = async (req: Request, res: Response) => {
     });
 
     // 4. Calculate overall class position
-    const studentTotals = classStudentIds.map((sId) => {
-      const studentRes = allClassResults.filter((r) => r.studentId === sId);
-      const total = studentRes.reduce((acc, curr) => acc + (curr.totalScore || 0), 0);
+    const studentTotals = classStudentIds.map((sId: string) => {
+      const studentRes = allClassResults.filter((r: Result) => r.studentId === sId);
+      const total = studentRes.reduce((acc: number, curr: Result) => acc + (curr.totalScore || 0), 0);
       const avg = total / (studentRes.length || 1);
       return { studentId: sId, total, average: avg };
     });
 
     // Sort students by total score to find overall rank
-    studentTotals.sort((a, b) => b.total - a.total);
-    const overallPosition = studentTotals.findIndex((s) => s.studentId === studentId) + 1;
-    const currentStudentTotals = studentTotals.find((s) => s.studentId === studentId);
+    studentTotals.sort((a: any, b: any) => b.total - a.total);
+    const overallPosition = studentTotals.findIndex((s: any) => s.studentId === studentId) + 1;
+    const currentStudentTotals = studentTotals.find((s: any) => s.studentId === studentId);
 
     // 5. Fetch attendance summaries
     const presentCount = await prisma.attendance.count({

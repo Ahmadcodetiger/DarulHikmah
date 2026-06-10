@@ -74,6 +74,7 @@ const AppLayout = ({ user, onLogout }: { user: any; onLogout: () => void }) => {
           <Header
             title={title}
             notifCount={3}
+            user={user}
             onMenuToggle={() => setSidebarOpen(prev => !prev)}
           />
         </div>
