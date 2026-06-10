@@ -1,0 +1,246 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  SUPER_ADMIN
+  PRINCIPAL
+  VICE_PRINCIPAL
+  HEAD_TEACHER
+  TEACHER
+  TAHFIZ_TEACHER
+  ACCOUNTANT
+  PARENT
+  STUDENT
+}
+
+enum Section {
+  NURSERY
+  PRIMARY
+  JUNIOR_SECONDARY
+  SENIOR_SECONDARY
+  ISLAMIC
+  TAHFIZ
+}
+
+enum AdmissionStatus {
+  PENDING
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+  EXCUSED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String?  @unique
+  phone     String?  @unique
+  password  String
+  role      Role
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  studentProfile Student?
+  staffProfile   Staff?
+  parentProfile  Parent?
+}
+
+model Parent {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  firstName String
+  lastName  String
+  address   String?
+  occupation String?
+  students  Student[]
+}
+
+model Staff {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  firstName String
+  lastName  String
+  staffId   String   @unique
+  department String?
+  assignedClasses Class[]
+}
+
+model Student {
+  id              String   @id @default(uuid())
+  userId          String?  @unique
+  user            User?    @relation(fields: [userId], references: [id])
+  parentId        String?
+  parent          Parent?  @relation(fields: [parentId], references: [id])
+  admissionNo     String   @unique
+  firstName       String
+  lastName        String
+  dateOfBirth     DateTime
+  gender          String
+  passportUrl     String?
+  state           String?
+  lga             String?
+  address         String?
+  medicalInfo     String?
+  admissionStatus AdmissionStatus @default(PENDING)
+
+  enrollments     Enrollment[]
+  attendances     Attendance[]
+  results         Result[]
+  tahfizRecords   TahfizRecord[]
+  invoices        Invoice[]
+}
+
+model AcademicSession {
+  id        String   @id @default(uuid())
+  name      String   // e.g., "2023/2024"
+  isActive  Boolean  @default(false)
+  terms     Term[]
+}
+
+model Term {
+  id        String   @id @default(uuid())
+  sessionId String
+  session   AcademicSession @relation(fields: [sessionId], references: [id])
+  name      String   // e.g., "First Term"
+  isActive  Boolean  @default(false)
+  
+  enrollments Enrollment[]
+}
+
+model Class {
+  id        String   @id @default(uuid())
+  name      String   // e.g., "JSS 1A"
+  section   Section
+  teacherId String?
+  teacher   Staff?   @relation(fields: [teacherId], references: [id])
+  
+  enrollments Enrollment[]
+  subjects    Subject[]
+}
+
+model Subject {
+  id         String   @id @default(uuid())
+  name       String
+  arabicName String?
+  classId    String
+  class      Class    @relation(fields: [classId], references: [id])
+  results    Result[]
+}
+
+model Enrollment {
+  id        String   @id @default(uuid())
+  studentId String
+  student   Student  @relation(fields: [studentId], references: [id])
+  classId   String
+  class     Class    @relation(fields: [classId], references: [id])
+  termId    String
+  term      Term     @relation(fields: [termId], references: [id])
+  @@unique([studentId, classId, termId])
+}
+
+model Attendance {
+  id        String   @id @default(uuid())
+  date      DateTime
+  status    AttendanceStatus
+  studentId String
+  student   Student  @relation(fields: [studentId], references: [id])
+  recordedBy String
+  createdAt DateTime @default(now())
+}
+
+model Result {
+  id           String   @id @default(uuid())
+  studentId    String
+  student      Student  @relation(fields: [studentId], references: [id])
+  subjectId    String
+  subject      Subject  @relation(fields: [subjectId], references: [id])
+  firstTest    Float?
+  secondTest   Float?
+  assignment   Float?
+  project      Float?
+  exam         Float?
+  totalScore   Float?
+  grade        String?
+  remark       String?
+  arabicRemark String?
+  termId       String
+  @@unique([studentId, subjectId, termId])
+}
+
+model TahfizRecord {
+  id             String   @id @default(uuid())
+  studentId      String
+  student        Student  @relation(fields: [studentId], references: [id])
+  date           DateTime
+  sabak          String?
+  sabaqi         String?
+  manzil         String?
+  juzCompleted   Int?
+  surahCompleted String?
+  fluencyRating  Int?     // 1-5 scale
+  accuracyRating Int?     // 1-5 scale
+  teacherId      String
+  createdAt      DateTime @default(now())
+}
+
+model Invoice {
+  id            String   @id @default(uuid())
+  studentId     String
+  student       Student  @relation(fields: [studentId], references: [id])
+  category      String   // Tuition, Books, etc.
+  amount        Float
+  amountPaid    Float    @default(0)
+  dueDate       DateTime
+  status        String   // PAID, PARTIAL, UNPAID
+  payments      Payment[]
+  createdAt     DateTime @default(now())
+}
+
+model Payment {
+  id            String   @id @default(uuid())
+  invoiceId     String
+  invoice       Invoice  @relation(fields: [invoiceId], references: [id])
+  amount        Float
+  paymentDate   DateTime @default(now())
+  reference     String?  @unique // Paystack reference
+  method        String   // ONLINE, CASH, BANK_TRANSFER
+  recordedBy    String?
+}
+
+model ResultApproval {
+  id        String   @id @default(uuid())
+  classId   String
+  termId    String
+  approved  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@unique([classId, termId])
+}
+
+model SchoolSetting {
+  id         String   @id @default(uuid())
+  name       String   @default("Darul Hikmah Science & Tech Academy")
+  shortName  String   @default("Darul Hikmah")
+  logoText   String   @default("DH")
+  address    String   @default("Sokoto Road, Sokoto State, Nigeria")
+  phone      String   @default("+234 803 123 4567")
+  email      String   @default("info@darulhikmah.edu.ng")
+  session    String   @default("2025/2026")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+

@@ -71,3 +71,5 @@ if (process.env.VERCEL !== '1') {
     console.log(`Server is running on port ${PORT}`);
   });
 }
+
+export default app;
