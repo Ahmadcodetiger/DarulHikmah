@@ -6,4 +6,18 @@
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/index.ts" }
   ]
+}{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/index.ts",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/index.ts"
+    }
+  ]
 }
