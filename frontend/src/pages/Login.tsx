@@ -366,21 +366,6 @@ export const Login = ({ onLoginSuccess }: LoginProps) => {
             </button>
           </form>
 
-          {/* Demo Credentials */}
-          <div className={`mt-5 pt-4 border-t ${theme === 'dark' ? 'border-white/[0.06]' : 'border-slate-100'}`}>
-            <details className="group">
-              <summary className={`flex items-center gap-2 text-xs font-semibold cursor-pointer list-none select-none ${theme === 'dark' ? 'text-slate-500 hover:text-slate-400' : 'text-slate-400 hover:text-slate-600'}`}>
-                <ShieldAlert size={13} className="text-emerald-500" />
-                Demo access credentials
-                <span className="ml-auto text-[10px] group-open:rotate-180 transition-transform">▾</span>
-              </summary>
-              <div className={`mt-3 p-3 rounded-xl space-y-1 font-mono text-[11px] ${theme === 'dark' ? 'bg-white/[0.03] text-slate-400' : 'bg-slate-50 text-slate-500'}`}>
-                <p>superadmin@darulhikmah.edu.ng</p>
-                <p>teacher@darulhikmah.edu.ng</p>
-                <p className={`text-[10px] mt-2 pt-2 border-t ${theme === 'dark' ? 'border-white/[0.06] text-slate-600' : 'border-slate-100 text-slate-400'}`}>Contact IT for production credentials</p>
-              </div>
-            </details>
-          </div>
         </div>
 
         {/* Security Notice */}
