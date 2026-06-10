@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "functions": {
-    "api/index.ts": {
-      "runtime": "nodejs"
+  "builds": [
+    {
+      "src": "api/index.ts",
+      "use": "@vercel/node"
     }
-  },
+  ],
   "routes": [
     { "handle": "filesystem" },
     { "src": "/api/v1/(.*)", "dest": "/api/index.ts" }
