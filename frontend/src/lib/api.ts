@@ -1,7 +1,7 @@
 // lib/api.ts
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://darul-hikmah-backend-git-main-ahmadcodetigers-projects.vercel.app/api/v1';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://darul-hikmah-backend.vercel.app/api/v1';
 
 // Axios instance with interceptor for auth token
 export const apiClient = axios.create({
