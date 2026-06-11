@@ -23,6 +23,7 @@ export const rateLimiter = (limit: number, windowMs: number) => {
 
     record.count++;
     if (record.count > limit) {
+      console.warn(`⏱️ [RATE_LIMIT] IP ${ip} exceeded limit - ${record.count}/${limit} requests`);
       return res.status(429).json({ error: 'Too many requests. Please try again later.' });
     }
 
