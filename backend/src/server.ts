@@ -38,6 +38,21 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
+
+app.get('/', (req, res) => {
+  res.json({
+    success: true,
+    message: 'School Management API is running',
+    version: '1.0.0'
+  });
+});
+app.get('/', (req, res) => {
+  res.json({
+    success: true,
+    message: 'School Management API is running',
+    version: '1.0.0'
+  });
+});
 // Request logging middleware
 app.use((req: Request, res: Response, next: NextFunction) => {
   const start = Date.now();
